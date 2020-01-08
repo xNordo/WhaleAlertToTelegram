@@ -7,7 +7,7 @@ class Message:
 
     def generate(self, response_dict):
         amount_usd = self.__separate_thousands(response_dict['amount_usd'])
-        self.content = f"""{response_dict['amount']} {response_dict['symbol'].upper()} ({amount_usd} USD) transferred from {response_dict['from']} to {response_dict['to']}."""
+        self.content = f""":rotating_light: {response_dict['amount']} {response_dict['symbol'].upper()} ({amount_usd} USD) transferred from {response_dict['from']} to {response_dict['to']}."""
 
     def send(self, bot_token, chatID):
         send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chatID + '&parse_mode=Markdown&text=' + self.content
