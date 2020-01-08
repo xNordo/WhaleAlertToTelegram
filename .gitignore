@@ -1,0 +1,5 @@
+.idea/
+__pycache__/
+bot.session
+login_data.py
+venv/
