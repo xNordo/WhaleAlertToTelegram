@@ -1,11 +1,11 @@
-class Json:
+class JsonHandler:
 
-    def __init__(self, api_response):
-        self.json_file = api_response.json()
+    def __init__(self, response):
+        self.json_file = response.json()
 
     def get_data(self):
         if self.__new_transactions_exist():
-            return self.__simplify_json()
+            return self.__simplify_json(self.json_file)
         else:
             return []
 
@@ -17,10 +17,10 @@ class Json:
             return True
 
     #TODO make use of timestamp or delete it
-    def __simplify_json(self):
+    def __simplify_json(self, json_file):
         outcome = []
 
-        for transaction in self.json_file["transactions"]:
+        for transaction in json_file["transactions"]:
             simplified_transaction = {"symbol": '', "from": "", "to": "", "timestamp": 0, "amount": 0, "amount_usd": 0}
 
             simplified_transaction["symbol"] = transaction["symbol"]

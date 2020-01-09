@@ -2,6 +2,9 @@ import requests
 import time
 import math
 
+# this variable defines how frequently script will ask API for update
+time_step = 30
+
 
 class WhaleAlertAPI:
 
@@ -12,7 +15,7 @@ class WhaleAlertAPI:
     def make_request(self):
         start_time = self.__get_time()
         try:
-            link = self.__create_request_link(self.api_key, start_time)
+            link = self.__create_request_link(start_time)
             r = requests.get(link)
             return r
 
@@ -20,15 +23,16 @@ class WhaleAlertAPI:
             print("Couldn't send request to API.")
 
     # Creates request URL to api with given API key and start time in UNIX timestamp
-    def __create_request_link(self, api_key, start_time):
-        link = f"https://api.whale-alert.io/v1/transactions?api_key={api_key}&min_value=500000&start={start_time}&cursor=2bc7e46-2bc7e46-5c66c0a7"
+    def __create_request_link(self, start_time):
+        link = f"https://api.whale-alert.io/v1/transactions?api_key={self.api_key}&min_value=500000&start={start_time}&cursor=2bc7e46-2bc7e46-5c66c0a7"
         return link
 
-    # Returns current time -10 secounds in UNIX timestamp
-    def __get_time(self):
+    # Returns current time - time_step secounds in UNIX timestamp
+    @staticmethod
+    def __get_time():
         current = time.time()
         outcome = math.floor(current)
-        outcome = outcome - 10
+        outcome = outcome - time_step
         return outcome
 
     @staticmethod
@@ -56,7 +60,6 @@ class WhaleAlertAPI:
             elif status == 503:
                 raise ServiceUnavilable
 
-
         except BadRequest:
             print("Bad Request -- Your request was not valid.")
 
@@ -76,17 +79,14 @@ class WhaleAlertAPI:
             print("Not Acceptable -- An unsupported format was requested.")
 
         except TooManyRequests:
-            print("Too Many Requests -- You have exceeded the allowed number of calls per minute. Lower call frequency or upgrade your plan for a higher rate limit.")
+            print("""Too Many Requests -- You have exceeded the allowed number of calls per minute. 
+            Lower call frequency or upgrade your plan for a higher rate limit.""")
 
         except InternalServerError:
             print("Internal Server Error -- There was a problem with the API host server. Try again later.")
 
         except ServiceUnavilable:
             print("Service Unavailable -- API is temporarily offline for maintenance. Try again later.")
-
-        except:
-            print("Something went terribly wrong")
-            exit()
 
 
 # Only Exceptions below
@@ -121,7 +121,8 @@ class NotAcceptable(Exception):
 
 
 class TooManyRequests(Exception):
-    """429	Too Many Requests -- You have exceeded the allowed number of calls per minute. Lower call frequency or upgrade your plan for a higher rate limit."""
+    """429	Too Many Requests -- You have exceeded the allowed number of calls per minute.
+    Lower call frequency or upgrade your plan for a higher rate limit."""
     pass
 
 

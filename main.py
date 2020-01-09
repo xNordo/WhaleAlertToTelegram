@@ -1,6 +1,6 @@
 import time
-from api import WhaleAlertAPI
-from processing import Json
+from api import WhaleAlertAPI, time_step
+from processing import JsonHandler
 from message import Message
 from login_data import bot_token, target_id, api_key
 
@@ -15,8 +15,8 @@ def main():
         # checks if api.make_request returned any value
         if response:
             api.check_status_code(response)
-            json = Json(response)
-            data = json.get_data()
+            json_handler = JsonHandler(response)
+            data = json_handler.get_data()
 
             if not data:
                 print('There is no new transactions.')
@@ -25,32 +25,34 @@ def main():
                 print("New transactions detected, sending message...")
                 message = Message()
                 for transaction in data:
-                    message.generate(transaction)
-                    message.send(bot_token, target_id)
+                    message_content = message.generate(transaction)
+                    message.send(message_content, bot_token, target_id)
 
         else:
             pass
 
-        time.sleep(30)
-
-
+        # time_step is defined in api.py.
+        # It's required to do it this way in order to sync time.sleep and WhaleAlertApi.__get_time()
+        time.sleep(time_step)
 
 
 if __name__ == '__main__':
     try:
         start_message = Message()
-        start_message.content = "Script is now online, looking for new transactions..."
-        start_message.send(bot_token, target_id)
+        start_message_content = "Script is now online, looking for new transactions..."
+        start_message.send(start_message_content, bot_token, target_id)
         main()
 
+    # This exception is raised when script is closed with ctrl+C
     except KeyboardInterrupt:
         print("Script has been terminated...")
 
-    except:
-        print("Unknown Error has occurred")
+    # this will be raised in any other case
+    #except Exception as ex:
+    #    print("Unknown error has occurred: ", ex)
 
     finally:
         end_message = Message()
-        end_message.content = "Script is currently offline, there will be no alerts until - back online notification"
-        end_message.send(bot_token, target_id)
+        end_message_content = "Script is currently offline, there will be no alerts until - back online notification"
+        end_message.send(end_message_content, bot_token, target_id)
         print("Script has ended")
