@@ -1,3 +1,3 @@
-bot_token = "your_bot_token"
-api_key = "your_api_key"
-target_id = "your_target_channel_id"
+bot_token = "your bot token"
+api_key = "your api key"
+target_id = "your channel id"
