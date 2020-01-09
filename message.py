@@ -4,8 +4,6 @@ import requests
 class Message:
 
     content = ''
-    send_status = False
-
 
     # generates message content from template
     def generate(self, response_dict):
@@ -25,7 +23,7 @@ class Message:
         send_status = response_json.get("ok", False)        # saves response send status to send_status, if it doesn't exist saves as default False
         try:
             if send_status:
-                print(f"Message {self.content} sent successfully")
+                print(f"Message [{self.content}] sent successfully")
             else:
                 raise MessageSendingError
 
