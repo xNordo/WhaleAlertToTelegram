@@ -26,13 +26,7 @@ if __name__ == '__main__':
                 message = Message()
                 for transaction in data:
                     message.generate(transaction)
-
-                    try:
-                        message.send(bot_token, target_id)
-                        print("Message: [" + message.content + "] sent.")
-
-                    except:
-                        print("Bot couldn't send message")
+                    message.send(bot_token, target_id)
 
             print("____________________________________________\n")
 

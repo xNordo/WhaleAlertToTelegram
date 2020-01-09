@@ -8,6 +8,8 @@ from login_data import api_key
 class WhaleAlertAPI:
 
     api_key = api_key
+    def __init(self, api_key):
+        self.api_key = api_key
 
     # Makes requests and returns api response
     def make_request(self):
@@ -21,7 +23,7 @@ class WhaleAlertAPI:
             print("Couldn't send request to API.")
 
     # Creates request URL to api with given API key and start time in UNIX timestamp
-    def __create_request_link(self,api_key, start_time):
+    def __create_request_link(self, api_key, start_time):
         link = f"https://api.whale-alert.io/v1/transactions?api_key={api_key}&min_value=500000&start={start_time}&cursor=2bc7e46-2bc7e46-5c66c0a7"
         return link
 
