@@ -24,7 +24,7 @@ class WhaleAlertAPI:
 
     # Creates request URL to api with given API key and start time in UNIX timestamp
     def __create_request_link(self, start_time):
-        link = f"https://api.whale-alert.io/v1/transactions?api_key={self.api_key}&min_value=500000&start={start_time}&cursor=2bc7e46-2bc7e46-5c66c0a7"
+        link = f"https://api.whale-alert.io/v1/transactions?api_key={self.api_key}&min_value=500000&start={start_time}"
         return link
 
     # Returns current time - time_step secounds in UNIX timestamp

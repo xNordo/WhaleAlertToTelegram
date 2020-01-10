@@ -2,3 +2,4 @@
 __pycache__/
 bot.session
 venv/
+tmp/main.pid
